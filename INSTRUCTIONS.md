@@ -196,8 +196,8 @@ OBS: Recomendo excetuar apenas a migração de 20250809203342_solution_migration
 
 ### Rodar seeds
 
-Para executar as seeds, também primeiramente é necessário saber que possui-se 3 arquivos de seeds 01_agentes.js, 02_casos.js e solution_migrations.js
-No qual, 01_agentes.js serve para definir as seeds, ou seja, os dados iniciais da tabela que conterá os dados dos agentes, e por sua vez 02_casos.js, para definir as seeds da tabela que conterá os dados dos casos. Já solution_migrations.js serve para chamar as duas seeds definidas anteriormente em uma só.
+Para executar as seeds, também primeiramente é necessário saber que possui-se 3 arquivos de seeds agentes.js, casos.js e solution_migrations.js
+No qual, agentes.js serve para definir as seeds, ou seja, os dados iniciais da tabela que conterá os dados dos agentes, e por sua vez casos.js, para definir as seeds da tabela que conterá os dados dos casos. Já solution_migrations.js serve para chamar as duas seeds definidas anteriormente em uma só.
 
 As seeds podem ser executas com o comando a baixo:
 
@@ -213,12 +213,12 @@ Ou para executar uma seed em especifico, como no caso somente a solution_migrati
 
 ou cada uma delas separadamente, como no caso da tabela agentes:
 ```sh 
- npx knex seed:run seeds/01_agentes
+ npx knex seed:run seeds/agentes
 ```
 
 E para a tabela casos: 
 ```sh 
- npx knex seed:run seeds/01_casos
+ npx knex seed:run seeds/casos
 ```
 
 OBS: Recomendo excetuar apenas a seed de solution_migrations.js, pois ela já executa as duas seed necessárias na ordem correta, ou seja, agentes e posteriormente casos.

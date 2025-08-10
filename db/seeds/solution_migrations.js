@@ -1,5 +1,5 @@
-const seedAgentes = require("./01_agentes.js");
-const seedCasos = require("./02_casos.js");
+const seedAgentes = require("./agentes.js");
+const seedCasos = require("./casos.js");
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
