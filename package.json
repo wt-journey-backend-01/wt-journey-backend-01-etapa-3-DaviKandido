@@ -1,0 +1,40 @@
+{
+  "name": "wt-journey-backend-01-etapa-3-davikandido",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/mzlsx7b3)",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js",
+    "db:cli": "sudo docker exec -it postgres-database psql -U postgres -d policia_db",
+    "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
+    "db:drop": "sudo docker exec -it postgres-database psql dropdb -U postgres policia_db",
+    "db:create": "sedo docker exec -it postgres-database psql createdb -U postgres policia_db",
+    "db:migrate": "npx knex migrate:20250809203342_solution_migrations.js",
+    "db:seed": "npx knex seed:run seeds/solution_migrations",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wt-journey-backend-01/wt-journey-backend-01-etapa-3-DaviKandido.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wt-journey-backend-01/wt-journey-backend-01-etapa-3-DaviKandido/issues"
+  },
+  "homepage": "https://github.com/wt-journey-backend-01/wt-journey-backend-01-etapa-3-DaviKandido#readme",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "zod": "^4.0.17"
+  }
+}
