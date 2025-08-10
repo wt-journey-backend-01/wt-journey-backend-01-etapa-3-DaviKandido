@@ -56,20 +56,4 @@ module.exports = {
       directory: "./db/seeds",
     },
   },
-  ci: {
-    client: "pg",
-    connection: {
-      host: "postgres",
-      port: 5433,
-      user: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-    },
-    migrations: {
-      directory: "./db/migrations",
-    },
-    seeds: {
-      directory: "./db/seeds",
-    },
-  },
 };

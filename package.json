@@ -8,10 +8,10 @@
     "dev": "nodemon server.js",
     "db:cli": "sudo docker exec -it postgres-database psql -U postgres -d policia_db",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
-    "db:drop": "sudo docker exec -it postgres-database psql dropdb -U postgres policia_db",
-    "db:create": "sedo docker exec -it postgres-database psql createdb -U postgres policia_db",
-    "db:migrate": "npx knex migrate:20250809203342_solution_migrations.js",
-    "db:seed": "npx knex seed:run seeds/solution_migrations",
+    "db:drop": "sudo docker exec -it postgres-database psql -U postgres -c 'DROP DATABASE IF EXISTS policia_db;'",
+    "db:create": "sudo docker exec -it postgres-database psql -U postgres -c 'CREATE DATABASE policia_db;'",
+    "db:migrate": "npx knex migrate:up 20250809203342_solution_migrations.js",
+    "db:seed": "npx knex seed:run --specific=solution_migrations.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

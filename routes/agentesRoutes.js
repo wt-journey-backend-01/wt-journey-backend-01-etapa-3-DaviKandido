@@ -63,8 +63,7 @@ const { validateSchema, validateCargo } = require("../utils/validateSchemas");
  *             examples:
  *               ListaDeAgentes:
  *                 value:
- *                   - id: 401bccf5-cf9e-489d-8412-446cd169a0f1
- *                     nome: Rommel Carneiro
+ *                   - nome: Rommel Carneiro
  *                     dataDeIncorporacao: 1992/10/04
  *                     cargo: delegado
  *       404:
@@ -112,7 +111,6 @@ router.get("/", validateCargo, agentesController.getAgentes);
  *             examples:
  *               ExemploAgente:
  *                 value:
- *                   id: 401bccf5-cf9e-489d-8412-446cd169a0f1
  *                   nome: Rommel Carneiro
  *                   dataDeIncorporacao: 1992/10/04
  *                   cargo: delegado
@@ -162,7 +160,6 @@ router.get("/:id", agentesController.getAgenteById);
  *             examples:
  *               ExemploAgente:
  *                 value:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -220,7 +217,6 @@ router.get("/:id/casos", agentesController.getCasosByAgenteId);
  *             examples:
  *               AgenteCriado:
  *                 value:
- *                   id: 401bccf5-cf9e-489d-8412-446cd169a0f1
  *                   nome: Rommel Carneiro
  *                   dataDeIncorporacao: 1992/10/04
  *                   cargo: delegado

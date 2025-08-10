@@ -43,7 +43,7 @@ const getAgentes = async (req, res, next) => {
 
     res.status(200).json(agentes);
   } catch (error) {
-    next(new ApiError("Falha ao obter os agentes: " + error, 500));
+    next(new ApiError("Falha ao obter os agentes: " + error.message, 500));
   }
 };
 
@@ -64,7 +64,7 @@ const getAgenteById = async (req, res, next) => {
 
     res.status(200).json(agente);
   } catch (error) {
-    next(new ApiError("Falha ao obter o agente: " + error, 500));
+    next(new ApiError("Falha ao obter o agente: " + error.message, 500));
   }
 };
 
@@ -88,7 +88,7 @@ const getCasosByAgenteId = async (req, res, next) => {
 
     res.status(200).json(agente);
   } catch (error) {
-    next(new ApiError("Falha ao obter o agente: " + error, 500));
+    next(new ApiError("Falha ao obter o agente: " + error.message, 500));
   }
 };
 
@@ -98,7 +98,7 @@ const createAgente = async (req, res, next) => {
     const agenteCreado = await agentesRepository.create(agente);
     res.status(201).json(agenteCreado);
   } catch (error) {
-    next(new ApiError("Falha ao criar o agente: " + error, 500));
+    next(new ApiError("Falha ao criar o agente: " + error.message, 500));
   }
 };
 
@@ -120,7 +120,7 @@ const updateAgente = async (req, res, next) => {
 
     res.status(200).json(agenteAtualizado);
   } catch (error) {
-    next(new ApiError("Falha ao atualizar o agente: " + error, 500));
+    next(new ApiError("Falha ao atualizar o agente: " + error.message, 500));
   }
 };
 
@@ -145,7 +145,7 @@ const updateAgentePartial = async (req, res, next) => {
 
     res.status(200).json(agenteAtualizado);
   } catch (error) {
-    next(new ApiError("Falha ao atualizar o agente: " + error, 500));
+    next(new ApiError("Falha ao atualizar o agente: " + error.message, 500));
   }
 };
 
@@ -166,7 +166,7 @@ const deleteAgente = async (req, res, next) => {
 
     res.status(204).send();
   } catch (error) {
-    next(new ApiError("Falha ao deletar o agente: " + error, 500));
+    next(new ApiError("Falha ao deletar o agente: " + error.message, 500));
   }
 };
 

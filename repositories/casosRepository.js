@@ -65,7 +65,7 @@ const update = async (id, caso) => {
     .from("casos")
     .where({ id: id })
     .returning("*");
-  return updatedCaso;
+  return updatedCaso[0];
 };
 
 const updatePartial = async (id, caso) => {
@@ -80,7 +80,7 @@ const updatePartial = async (id, caso) => {
     .from("casos")
     .where({ id: id })
     .returning("*");
-  return updatedCaso;
+  return updatedCaso[0];
 };
 
 const remove = async (id) => {
@@ -88,7 +88,7 @@ const remove = async (id) => {
   if (!casoDB) {
     return null;
   }
-  const removedCaso = db.del().from("casos").where({ id }).returning("*");
+  const [removedCaso] = await db.del().from("casos").where({ id }).returning("*");
   return removedCaso;
 };
 

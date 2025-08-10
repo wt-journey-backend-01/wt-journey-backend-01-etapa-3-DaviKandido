@@ -38,7 +38,7 @@ const update = async (id, agente) => {
     .from("agentes")
     .where({ id: id })
     .returning("*");
-  return updatedagente;
+  return updatedagente[0];
 };
 
 const updatePartial = async (id, agente) => {
@@ -53,7 +53,7 @@ const updatePartial = async (id, agente) => {
     .where({ id: id })
     .returning("*");
 
-  return updatedAgente;
+  return updatedAgente[0];
 };
 
 const remove = async (id) => {
@@ -64,7 +64,7 @@ const remove = async (id) => {
   const removedAgente = await db
     .del().from("agentes")
     .where({ id }).returning("*");
-  return removedAgente;
+  return removedAgente[0];
 };
 
 module.exports = {

@@ -63,7 +63,6 @@ const { validateSchema } = require("../utils/validateSchemas");
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -114,7 +113,6 @@ router.get('/', casosController.getCasos);
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -170,7 +168,6 @@ router.get("/search", casosController.getSearch);
  *             schema:
  *               type: object
  *               example:
- *                  id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                  titulo: homicidio
  *                  descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                  status: aberto
@@ -216,7 +213,6 @@ router.get('/:id', casosController.getCasoById);
  *           examples:
  *             caso:
  *               value:
- *                 - id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                   titulo: homicidio
  *                   descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                   status: aberto
@@ -229,7 +225,6 @@ router.get('/:id', casosController.getCasoById);
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -282,7 +277,6 @@ router.post("/", validateSchema(casoPostSchema), casosController.createCaso);
  *           examples:
  *             caso:
  *               value:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -295,7 +289,6 @@ router.post("/", validateSchema(casoPostSchema), casosController.createCaso);
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -366,7 +359,6 @@ router.put("/:id", validateSchema(casoPutSchema), casosController.updateCaso);
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
@@ -426,7 +418,6 @@ router.patch('/:id', validateSchema(casoPatchSchema),casosController.updateCasoP
  *             schema:
  *               type: object
  *               example:
- *                 id: f5fb2ad5-22a8-4cb4-90f2-8733517a0d46
  *                 titulo: homicidio
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto

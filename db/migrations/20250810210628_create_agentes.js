@@ -3,6 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
+  knex.schema.dropTableIfExists("agentes");
   return knex.schema.createTable("agentes", (table) => {
     table.increments("id").primary();
     table.string("nome").notNullable();
