@@ -7,16 +7,24 @@ Neste arquivo você encontrará a estrutura de pastas do projeto as instruções
 📦 Meu-REPOSITÓRIO
 │
 ├── package.json
+├── package-lock.json
+├── .gitignore
 ├── server.js
 ├── .env
 ├── knexfile.js
 ├── INSTRUCTIONS.md
 ├── docker-compose.yml
-
 │
 ├── db/
 │ ├── migrations/
+│ │ └──20250809203342_solution_migrations.js
+│ │ └──20250810210628_create_agentes.js
+│ │ └──20250810213103_create_casos.js
 │ ├── seeds/
+│ │ └──agentes.js
+│ │ └──casos.js
+│ │ └──20250810213103_create_casos.js
+│ │
 │ └── db.js
 │
 ├── routes/
@@ -36,6 +44,9 @@ Neste arquivo você encontrará a estrutura de pastas do projeto as instruções
 | └── validateSchema.js
 | └── ZodSchemas.js
 │
+├── docs/
+│   └── swagger.js
+│
 ```
 
 ## Subir o banco com Docker
@@ -53,7 +64,7 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
         ports:
-            - "5433:5432" # Porta externa alterada para evitar conflito, utiliza-se a 5433:5432
+            - "2:5432" # Porta externa alterada para evitar conflito, utiliza-se a 5433:5432
         volumes:
             - postgres-data:/var/lib/postgresql/data
 

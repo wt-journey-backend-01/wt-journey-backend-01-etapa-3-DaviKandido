@@ -4,20 +4,20 @@
  */
 exports.up = function (knex) {
   //DROP TABLE IF EXISTS casos;
-  knex.schema.dropTableIfExists("casos");
-
-  return knex.schema.createTable("casos", (table) => {
-    table.increments("id").primary();
-    table.string("titulo").notNullable();
-    table.string("descricao").notNullable();
-    table.enum("status", ["aberto", "solucionado"]).notNullable();
-    table
-      .integer("agente_id")
-      .references("id")
-      .inTable("agentes")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE")
-      .notNullable();
+  knex.schema.dropTableIfExists("casos").then(() => {
+    return knex.schema.createTable("casos", (table) => {
+      table.increments("id").primary();
+      table.string("titulo").notNullable();
+      table.string("descricao").notNullable();
+      table.enum("status", ["aberto", "solucionado"]).notNullable();
+      table
+        .integer("agente_id")
+        .references("id")
+        .inTable("agentes")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE")
+        .notNullable();
+    });
   });
 };
 

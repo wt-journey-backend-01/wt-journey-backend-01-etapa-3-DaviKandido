@@ -26,7 +26,7 @@ module.exports = {
     client: "pg",
     connection: {
       host: "127.0.0.1",
-      port: 5433,
+      port: 543,
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
@@ -44,7 +44,7 @@ module.exports = {
     client: "pg",
     connection: {
       host: "postgres",
-      port: 5433,
+      port: 543,
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
@@ -64,7 +64,7 @@ module.exports = {
     client: "pg",
     connection: {
       host: "postgres",
-      port: 5433,
+      port: 543,
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
@@ -82,7 +82,7 @@ module.exports = {
 **Por que isso importa?**  
 Você declarou a configuração `ci` duas vezes, o que em JavaScript faz com que a última sobrescreva a primeira. Isso pode causar confusão para o Knex ao tentar carregar a configuração correta, especialmente se você estiver usando o ambiente `ci` em algum momento.
 
-Além disso, notei que o host e porta no seu `knexfile.js` são `127.0.0.1` e `5433`, o que está correto para o mapeamento do Docker (porta externa 5433 mapeada para 5432 interna do container), mas é fundamental garantir que seu arquivo `.env` tenha as variáveis `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB` corretamente definidas e que o container do Docker esteja rodando e aceitando conexões.
+Além disso, notei que o host e porta no seu `knexfile.js` são `127.0.0.1` e `543`, o que está correto para o mapeamento do Docker (porta externa 543 mapeada para 5432 interna do container), mas é fundamental garantir que seu arquivo `.env` tenha as variáveis `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB` corretamente definidas e que o container do Docker esteja rodando e aceitando conexões.
 
 **Recomendo:**  
 - Remover a duplicidade da chave `ci` no `knexfile.js`.  

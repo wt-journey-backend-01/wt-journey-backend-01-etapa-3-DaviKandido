@@ -46,49 +46,48 @@ const findAll = async ({ agente_id = null, status = null, q = null }) => {
 };
 
 const findById = async (id) =>
-  await db.select("*").from("casos").where({ id }).first();
+  await db("casos").where({ id }).first();
 
 const create = async (caso) => {
   const [newCaso] = await db.insert(caso).into("casos").returning("*");
   return newCaso;
 };
 
-const getCasosByAgenteId = async (id) => await db.select("*").from("casos").where({ agente_id: id });
+const getCasosByAgenteId = async (id) =>
+  await db("casos").where({ agente_id: id });
 
 const update = async (id, caso) => {
-  const casoDB = await db.select("*").from("casos").where({ id }).first();
+  const casoDB = await db("casos").where({ id }).first();
   if (!casoDB) {
     return null;
   }
-  const updatedCaso = await db
+  const updatedCaso = await db("casos")
     .update(caso)
-    .from("casos")
     .where({ id: id })
     .returning("*");
   return updatedCaso[0];
 };
 
 const updatePartial = async (id, caso) => {
-  const casoDB = await db.select("*").from("casos").where({ id }).first();
+  const casoDB = await db("casos").where({ id }).first();
   if (!casoDB) {
     return null;
   }
 
   const updateCaso = { ...casoDB, ...caso };
-  const updatedCaso = await db
+  const updatedCaso = await db("casos")
     .update(updateCaso)
-    .from("casos")
     .where({ id: id })
     .returning("*");
   return updatedCaso[0];
 };
 
 const remove = async (id) => {
-  const casoDB = await db.select("*").from("casos").where({ id }).first();
+  const casoDB = await db("casos").where({ id }).first();
   if (!casoDB) {
     return null;
   }
-  const [removedCaso] = await db.del().from("casos").where({ id }).returning("*");
+  const [removedCaso] = await db("casos").del().where({ id }).returning("*");
   return removedCaso;
 };
 

@@ -3,12 +3,13 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  knex.schema.dropTableIfExists("agentes");
-  return knex.schema.createTable("agentes", (table) => {
-    table.increments("id").primary();
-    table.string("nome").notNullable();
-    table.date("dataDeIncorporacao").notNullable();
-    table.string("cargo").notNullable();
+  knex.schema.dropTableIfExists("agentes").then(() => {
+    return knex.schema.createTable("agentes", (table) => {
+      table.increments("id").primary();
+      table.string("nome").notNullable();
+      table.date("dataDeIncorporacao").notNullable();
+      table.string("cargo").notNullable();
+    });
   });
 };
 

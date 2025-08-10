@@ -1,13 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const casosController = require('../controllers/casosController');
+const casosController = require("../controllers/casosController");
 
-const { casoPostSchema, casoPatchSchema, casoPutSchema  } = require('../utils/ZodSchemas');
+const {
+  casoPostSchema,
+  casoPatchSchema,
+  casoPutSchema,
+} = require("../utils/ZodSchemas");
 const { validateSchema } = require("../utils/validateSchemas");
 
-
-
- /**
+/**
  *  @openapi
  * components:
  *   schemas:
@@ -32,9 +34,6 @@ const { validateSchema } = require("../utils/validateSchemas");
  *         agente_id:
  *           type: string
  */
-
-
-
 
 // Lista todos os casos registrados.
 /**
@@ -87,9 +86,7 @@ const { validateSchema } = require("../utils/validateSchemas");
  *                 message: Falha ao obter os casos
  *
  */
-router.get('/', casosController.getCasos);
-
-
+router.get("/", casosController.getCasos);
 
 // Lista todos em que a palavra da query string aparece no titulo ou descricao
 /**
@@ -139,7 +136,6 @@ router.get('/', casosController.getCasos);
  */
 router.get("/search", casosController.getSearch);
 
-
 // Retorna os detalhes de um caso específico.
 /**
  * @openapi
@@ -159,7 +155,7 @@ router.get("/search", casosController.getSearch);
  *         schema:
  *           type: string
  *         description: Retorna os dados completos do agente responsável por um junto do caso específico.
- * 
+ *
  *     responses:
  *       200:
  *         description: caso retornado com sucesso
@@ -172,7 +168,7 @@ router.get("/search", casosController.getSearch);
  *                  descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                  status: aberto
  *                  agente_id: 401bccf5-cf9e-489d-8412-446cd169a0f1
- *                  
+ *
  *       404:
  *         description: caso não encontrados
  *         content:
@@ -193,8 +189,7 @@ router.get("/search", casosController.getSearch);
  *                 message: Falha ao obter o caso
  *
  */
-router.get('/:id', casosController.getCasoById);
-
+router.get("/:id", casosController.getCasoById);
 
 // Cria um novo caso com os seguintes campos:
 /**
@@ -249,10 +244,9 @@ router.get('/:id', casosController.getCasoById);
  *               type: object
  *               example:
  *                 status: 500
- *                 message: Falha ao criar o caso 
+ *                 message: Falha ao criar o caso
  */
 router.post("/", validateSchema(casoPostSchema), casosController.createCaso);
-
 
 // Atualiza os dados de um caso por completo.
 /**
@@ -322,7 +316,7 @@ router.post("/", validateSchema(casoPostSchema), casosController.createCaso);
  *               type: object
  *               example:
  *                 status: 500
- *                 message: Falha ao atualizar o caso 
+ *                 message: Falha ao atualizar o caso
  */
 router.put("/:id", validateSchema(casoPutSchema), casosController.updateCaso);
 
@@ -348,9 +342,10 @@ router.put("/:id", validateSchema(casoPutSchema), casosController.updateCaso);
  *           examples:
  *             caso:
  *               value:
- *                 nome: Rommel Carneiro
- *                 dataDeIncorporacao: 1992/10/04
- *                 cargo: delegado
+ *                 titulo: homicidio
+ *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
+ *                 status: aberto
+ *                 agente_id: 401bccf5-cf9e-489d-8412-446cd169a0f1
  *     responses:
  *       200:
  *         description: caso atualizado com sucesso
@@ -392,9 +387,13 @@ router.put("/:id", validateSchema(casoPutSchema), casosController.updateCaso);
  *               type: object
  *               example:
  *                 status: 500
- *                 message: Falha ao atualizar o caso 
+ *                 message: Falha ao atualizar o caso
  */
-router.patch('/:id', validateSchema(casoPatchSchema),casosController.updateCasoPartial);
+router.patch(
+  "/:id",
+  validateSchema(casoPatchSchema),
+  casosController.updateCasoPartial
+);
 
 // Remove um caso.
 /**
@@ -422,7 +421,7 @@ router.patch('/:id', validateSchema(casoPatchSchema),casosController.updateCasoP
  *                 descricao: Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.
  *                 status: aberto
  *                 agente_id: 401bccf5-cf9e-489d-8412-446cd169a0f1
- * 
+ *
  *       404:
  *         description: caso nao encontrado
  *         content:
@@ -432,7 +431,7 @@ router.patch('/:id', validateSchema(casoPatchSchema),casosController.updateCasoP
  *               example:
  *                 status: 404
  *                 message: caso nao encontrado
- * 
+ *
  *       500:
  *         description: Falha ao deletar o caso
  *         content:
@@ -441,8 +440,8 @@ router.patch('/:id', validateSchema(casoPatchSchema),casosController.updateCasoP
  *               type: object
  *               example:
  *                 status: 500
- *                 message: Falha ao deletar o caso 
+ *                 message: Falha ao deletar o caso
  */
-router.delete('/:id', casosController.deleteCaso);
+router.delete("/:id", casosController.deleteCaso);
 
 module.exports = router;
