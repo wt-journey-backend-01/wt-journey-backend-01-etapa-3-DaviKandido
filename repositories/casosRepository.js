@@ -17,7 +17,7 @@ const findAll = async ({ agente_id = null, status = null, q = null }) => {
     });
   }
 
-  return query;
+  return await query;
 };
 
 const findById = async (id) =>

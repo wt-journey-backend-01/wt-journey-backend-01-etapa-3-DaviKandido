@@ -18,7 +18,7 @@ const findAll = async ({ cargo = null, sort = null }) => {
     }
   }
 
-  return query;
+  return await query;
 };
 
 const findById = async (id) =>

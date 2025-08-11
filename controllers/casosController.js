@@ -4,20 +4,7 @@ const ApiError = require("../utils/errorHandler");
 
 const getCasos = async (req, res, next) => {
   try {
-
     const { agente_id = null, status = null } = req.query;
-
-    const casos = await casosRepository.findAll({ agente_id, status });
-
-    if (req.query.agente_id) {
-      if (!casos ||casos.length === 0) {
-        return next(
-          new ApiError("Casos nao encontrados", 404, [
-            { agente_id: "Agente informado não existe" },
-          ])
-        );
-      }
-    }
 
     if (req.query.status) {
       if (req.query.status !== "aberto" && req.query.status !== "solucionado") {
@@ -30,14 +17,29 @@ const getCasos = async (req, res, next) => {
           ])
         );
       }
+    }
 
-      if (!casos ||casos.length === 0) {
+    const casos = await casosRepository.findAll({ agente_id, status });
+
+    if (req.query.agente_id) {
+      if (!casos || casos.length === 0) {
         return next(
           new ApiError("Casos nao encontrados", 404, [
-            { status: "Nenhum caso encontrado" },
+            {
+              agente_id:
+                "Agente informado não possui casos correspondentes ou não existe",
+            },
           ])
         );
       }
+    }
+
+    if (!casos || casos.length === 0) {
+      return next(
+        new ApiError("Casos nao encontrados", 404, [
+          { status: "Nenhum caso encontrado" },
+        ])
+      );
     }
 
     res.status(200).json(casos);
@@ -121,7 +123,6 @@ const getCasoById = async (req, res, next) => {
     );
   }
 };
-
 
 const createCaso = async (req, res, next) => {
   try {
