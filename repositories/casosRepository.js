@@ -87,7 +87,7 @@ const remove = async (id) => {
   if (!casoDB) {
     return null;
   }
-  const [removedCaso] = await db("casos").del().where({ id }).returning("*");
+  const [removedCaso] = await db("casos").where({ id }).del().returning("*");
   return removedCaso;
 };
 

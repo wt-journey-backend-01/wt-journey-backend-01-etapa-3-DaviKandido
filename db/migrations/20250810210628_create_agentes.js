@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  knex.schema.dropTableIfExists("agentes").then(() => {
+  return knex.schema.dropTableIfExists("agentes").then(() => {
     return knex.schema.createTable("agentes", (table) => {
       table.increments("id").primary();
       table.string("nome").notNullable();
@@ -18,7 +18,9 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("agentes").alterTable("casos", (table) => {
+  return knex.schema.alterTable("casos", (table) => {
     table.dropForeign("agente_id");
+    table.dropColumn("agente_id");
+    return knex.schema.dropTable("agentes");
   });
 };

@@ -98,7 +98,7 @@ sudo docker-compose up -d
 
 ### Executar migrations
 
-Esse projeto possui 3 arquivos de migrations, 20250809194931_create_agentes.js, 20250809194946_create_casos.js e 20250809194946_create_casos.js.
+Esse projeto possui 3 arquivos de migrations, 20250809203342_solution_migrations.js, 20250809194946_create_casos.js e 20250809194946_create_casos.js.
 No qual, 20250809194931_create_agentes.js serve para definir as migrações da tabela que conterá os dados dos agentes, e por sua vez 20250809194946_create_casos.js, para definir as migrações da tabela que conterá os dados dos casos. Já 20250809203342_solution_migrations.js serve para chamar as duas migrações definidas anteriormente em uma só.
 
 As migrações podem ser executas com o comando a baixo:
@@ -115,25 +115,28 @@ Ou para executar uma migração em especifico, como no caso somente a 2025080920
 
 Conteúdo:
 ```js
-const migrationsAgentes = require("./20250810210628_create_agentes")
-const migrationsCasos = require("./20250810213103_create_casos")
+const migrationsAgentes = require("./20250810210628_create_agentes");
+const migrationsCasos = require("./20250810213103_create_casos");
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
-  
-  return Promise.all([migrationsAgentes.up(knex), migrationsCasos.up(knex)]) 
+exports.up = async function (knex) {
+  await migrationsAgentes.up(knex);
+  await migrationsCasos.up(knex);
 };
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
-  
+exports.down = function (knex) {
+  knex.schema
+    .dropTableIfExists("agentes")
+    .then(() => knex.schema.dropTableIfExists("casos"));
 };
+
 ```
 
 ou cada uma delas separadamente, como no caso da tabela agentes:
@@ -148,11 +151,13 @@ Conteúdo:
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("agentes", (table) => {
-    table.increments("id").primary();
-    table.string("nome").notNullable();
-    table.date("dataDeIncorporacao").notNullable();
-    table.string("cargo").notNullable();
+  return knex.schema.dropTableIfExists("agentes").then(() => {
+    return knex.schema.createTable("agentes", (table) => {
+      table.increments("id").primary();
+      table.string("nome").notNullable();
+      table.date("dataDeIncorporacao").notNullable();
+      table.string("cargo").notNullable();
+    });
   });
 };
 
@@ -161,8 +166,10 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("agentes").alterTable("casos", (table) => {
+  return knex.schema.alterTable("casos", (table) => {
     table.dropForeign("agente_id");
+    table.dropColumn("agente_id");
+    return knex.schema.dropTable("agentes");
   });
 };
 ```
@@ -179,18 +186,21 @@ Conteúdo:
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable("casos", (table) => {
-    table.increments("id").primary();
-    table.string("titulo").notNullable();
-    table.string("descricao").notNullable();
-    table.enum("status", ["aberto", "solucionado"]).notNullable();
-    table
-      .integer("agente_id")
-      .references("id")
-      .inTable("agentes")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE")
-      .notNullable();
+  //DROP TABLE IF EXISTS casos;
+  return knex.schema.dropTableIfExists("casos").then(() => {
+    return knex.schema.createTable("casos", (table) => {
+      table.increments("id").primary();
+      table.string("titulo").notNullable();
+      table.string("descricao").notNullable();
+      table.enum("status", ["aberto", "solucionado"]).notNullable();
+      table
+        .integer("agente_id")
+        .references("id")
+        .inTable("agentes")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE")
+        .notNullable();
+    });
   });
 };
 
@@ -219,17 +229,17 @@ Para executar todas as migrações:
 
 Ou para executar uma seed em especifico, como no caso somente a solution_migrations.js:
 ```sh 
- npx knex seed:run seeds/solution_migrations
+ npx knex seed:run --specific=solution_migrations.js
 ```
 
 ou cada uma delas separadamente, como no caso da tabela agentes:
 ```sh 
- npx knex seed:run seeds/agentes
+ npx knex seed:run --specific=agentes.js
 ```
 
 E para a tabela casos: 
 ```sh 
- npx knex seed:run seeds/casos
+ npx knex seed:run --specific=casos.js
 ```
 
 OBS: Recomendo excetuar apenas a seed de solution_migrations.js, pois ela já executa as duas seed necessárias na ordem correta, ou seja, agentes e posteriormente casos.

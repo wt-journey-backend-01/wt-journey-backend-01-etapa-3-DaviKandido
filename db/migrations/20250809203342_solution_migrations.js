@@ -15,7 +15,7 @@ exports.up = async function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  knex.schema
-    .dropTableIfExists("agentes")
-    .then(() => knex.schema.dropTableIfExists("casos"));
+  return knex.schema
+    .dropTableIfExists("casos")
+    .then(() => knex.schema.dropTableIfExists("agentes"));
 };

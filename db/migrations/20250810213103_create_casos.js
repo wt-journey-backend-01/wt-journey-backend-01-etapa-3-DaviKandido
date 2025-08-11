@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   //DROP TABLE IF EXISTS casos;
-  knex.schema.dropTableIfExists("casos").then(() => {
+  return knex.schema.dropTableIfExists("casos").then(() => {
     return knex.schema.createTable("casos", (table) => {
       table.increments("id").primary();
       table.string("titulo").notNullable();

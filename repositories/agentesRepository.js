@@ -48,7 +48,7 @@ const updatePartial = async (id, agente) => {
   }
   const updateAgente = { ...agenteDB, ...agente };
   const updatedAgente = await db("agentes")
-    .update(agente)
+    .update(updateAgente)
     .where({ id: id })
     .returning("*");
 
@@ -62,7 +62,7 @@ const remove = async (id) => {
   if (!agenteDB) {
     return null;
   }
-  const removedAgente = await db("agentes").del().where({ id }).returning("*");
+  const removedAgente = await db("agentes").where({ id }).del().returning("*");
   return removedAgente[0];
 };
 
