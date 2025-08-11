@@ -1,219 +1,274 @@
 <sup>Esse é um feedback gerado por IA, ele pode conter erros.</sup>
 
-Você tem 6 créditos restantes para usar o sistema de feedback AI.
+Você tem 5 créditos restantes para usar o sistema de feedback AI.
 
 # Feedback para DaviKandido:
 
-Nota final: **20.2/100**
+Nota final: **89.2/100**
 
-# Olá, DaviKandido! 🚀 Vamos juntos destrinchar seu projeto e avançar rumo à excelência? 💪
+# Feedback para você, DaviKandido! 🚓✨
 
-Antes de mais nada, quero começar celebrando o que você já fez de muito bom nesse desafio! 🎉 Você estruturou bem seu projeto, organizou as pastas, utilizou Knex.js para a conexão com o banco e criou os arquivos de migrations e seeds. Também implementou validação de dados e tratamento de erros com mensagens customizadas, o que é um passo super importante para APIs robustas!
-
-Além disso, parabéns por conseguir fazer os testes de payloads incorretos passarem (status 400)! Isso mostra que seu esquema de validação está funcionando, e você está cuidando da qualidade dos dados recebidos. 👏 Isso é fundamental para prevenir bugs e garantir integridade.
+Olá, Davi! Primeiro, quero parabenizá-lo pelo esforço e pelo ótimo resultado geral do seu projeto! 🥳 Você conseguiu implementar a maior parte dos requisitos obrigatórios com sucesso, especialmente a criação, leitura, atualização parcial e deleção dos agentes e casos. Isso mostra que seu domínio sobre o Express.js, Knex e PostgreSQL está muito bom! Além disso, você foi além e entregou alguns filtros bônus importantes, como a filtragem de casos por status e por agente. 👏 Isso é um diferencial que demonstra seu comprometimento e vontade de aprender mais.
 
 ---
 
-# Agora, vamos ao que precisa de atenção para fazer seu projeto decolar de vez! 🕵️‍♂️
+## Vamos analisar juntos os pontos que podem ser aprimorados para você chegar ainda mais longe! 🔍
 
-## 1. Conexão com o Banco de Dados e Configuração do Knex
+### 1. Estrutura de Diretórios e Organização do Projeto
 
-Ao analisar seu código, percebi que a configuração do Knex está correta na maior parte, mas um ponto importante para você revisar com carinho é a conexão com o banco PostgreSQL via Docker e seu `.env`.
+Sua estrutura está muito próxima do esperado, o que é ótimo! A organização em pastas `controllers`, `repositories`, `routes`, `db` e `utils` está correta e mantém o projeto modular e escalável. Isso facilita a manutenção e evolução futura.
 
-### Por que isso?
-
-- Muitos endpoints base, como os de criação, leitura, atualização e deleção de agentes e casos, não estão funcionando como esperado.
-- Isso geralmente indica que o banco de dados pode não estar acessível, ou as tabelas não foram criadas corretamente.
-- Se o banco não estiver rodando, ou as migrations não forem executadas, suas queries no `repositories` vão falhar silenciosamente ou retornar vazio.
-
-### O que revisar?
-
-- **Arquivo `.env`**: Verifique se as variáveis `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB` estão definidas e correspondem ao que está no `docker-compose.yml`.
-- **Docker Compose**: No seu `docker-compose.yml`, a porta está mapeada para `"5432:5432"` (o que é correto), mas no `INSTRUCTIONS.md` há uma indicação de usar `"2:5432"` ou `"5433:5432"` para evitar conflito. Confirme que o container está rodando e escutando na porta correta.
-- **Subir o banco**: Execute o comando correto para subir o container (`docker compose up -d` ou `sudo docker compose up -d`), e depois rode suas migrations com `npx knex migrate:latest` ou `npx knex migrate:up 20250809203342_solution_migrations.js`.
-- **Seeds**: Após as migrations, rode as seeds para popular as tabelas.
-
-Se o banco não estiver rodando ou as tabelas não existirem, suas queries no `repositories` não vão retornar dados, e isso explica a falha em vários endpoints.
-
-### Dica de estudo:
-
-- Para entender melhor como configurar o banco e conectar com Node.js via Docker e Knex, dê uma olhada nesse vídeo super didático:  
-  [Configuração de Banco de Dados com Docker e Knex](http://googleusercontent.com/youtube.com/docker-postgresql-node)  
-- E também explore a documentação oficial do Knex para migrations:  
-  https://knexjs.org/guide/migrations.html
+Uma observação: no arquivo `INSTRUCTIONS.md` e na estrutura geral, o arquivo `db.js` está dentro da pasta `db/`, e isso está correto. Você fez isso bem! 👍
 
 ---
 
-## 2. Estrutura e Organização do Projeto
+### 2. Conexão com o Banco de Dados e Configuração do Knex
 
-A estrutura do seu projeto está muito próxima do esperado, mas notei que no `docker-compose.yml` o serviço está nomeado como `postgres-db`, enquanto no seu `package.json` e `INSTRUCTIONS.md` você usa `postgres-database`. Essa pequena discrepância pode causar confusão na hora de executar comandos Docker, por exemplo:
-
-```yaml
-services:
-  postgres-db:
-    container_name: postgres-database
-    ...
-```
-
-E no seu script `package.json`:
-
-```json
-"db:cli": "sudo docker exec -it postgres-database psql -U postgres -d policia_db",
-```
-
-Se você tentar executar o comando `npm run db:cli`, o Docker pode não encontrar o container pelo nome `postgres-database` se o serviço não estiver ativo ou se o nome do container estiver diferente.
-
-### Sugestão:
-
-- Mantenha o nome do serviço e do container consistentes para evitar erros de conexão.
-- Verifique também se as migrations e seeds estão na pasta correta (`db/migrations` e `db/seeds`) e se seus arquivos estão nomeados corretamente (com extensão `.js`).
-
----
-
-## 3. Implementação dos Repositories — Cuidado com o Retorno das Queries
-
-No seu `agentesRepository.js` e `casosRepository.js`, as queries estão bem estruturadas, mas algumas funções podem retornar `undefined` ou objetos vazios se a query falhar.
-
-Por exemplo, no método `remove` do `agentesRepository`:
+Eu analisei seu `knexfile.js` e o arquivo `db/db.js` que inicializa o Knex. Eles estão configurados de forma adequada, utilizando as variáveis de ambiente do `.env` para conexão. Isso é fundamental e você fez corretamente!
 
 ```js
-const remove = async (id) => {
-  const agenteDB = await db("agentes").where({ id: id }).first();
-  if (!agenteDB) {
-    return null;
-  }
-  const removedAgente = await db("agentes").where({ id }).del().returning("*");
-  return removedAgente[0];
-};
+const knexConfig = require("../knexfile");
+const knex = require("knex");
+
+const nodeEnv = process.env.NODE_ENV || "development";
+const config = knexConfig[nodeEnv];
+
+const db = knex(config);
+
+module.exports = db;
 ```
 
-O método `.del()` no PostgreSQL não suporta `.returning()` para deletar linhas, então o retorno pode ser inesperado. Isso pode fazer com que o método não retorne o agente deletado, e sua lógica de confirmação de exclusão falhe.
+Só reforço que, para evitar problemas, é importante garantir que seu arquivo `.env` esteja populado com as variáveis corretas: `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB`. Se essas estiverem faltando ou incorretas, a conexão falhará e impactará toda a API.
 
-### Como corrigir?
-
-- Você pode primeiro buscar o agente, armazenar seus dados, depois deletar, e retornar os dados armazenados:
-
-```js
-const remove = async (id) => {
-  const agenteDB = await db("agentes").where({ id }).first();
-  if (!agenteDB) {
-    return null;
-  }
-  await db("agentes").where({ id }).del();
-  return agenteDB;
-};
-```
-
-O mesmo vale para o `remove` no `casosRepository`.
+Se você quiser revisar como configurar o banco com Docker e Knex, recomendo muito este vídeo:  
+[Configuração de Banco de Dados com Docker e Knex](http://googleusercontent.com/youtube.com/docker-postgresql-node)
 
 ---
 
-## 4. Migrations — Consistência e Ordem de Execução
+### 3. Migrations e Seeds
 
-Você tem três arquivos de migrations, e um deles (`20250809203342_solution_migrations.js`) chama os dois anteriores.
+Você criou migrations muito bem estruturadas para as tabelas `agentes` e `casos`, e ainda criou o arquivo `solution_migrations.js` para orquestrar a execução em ordem correta — isso é ótimo para garantir integridade no banco!
 
-No arquivo `20250810210628_create_agentes.js`, o método `down` está fazendo alterações na tabela `casos` (removendo foreign key e coluna `agente_id`), mas isso pode causar problemas se as migrations forem revertidas fora de ordem.
-
-Veja:
+Por exemplo, no migration de agentes:
 
 ```js
-exports.down = function (knex) {
-  return knex.schema.alterTable("casos", (table) => {
-    table.dropForeign("agente_id");
-    table.dropColumn("agente_id");
-    return knex.schema.dropTable("agentes");
+exports.up = function (knex) {
+  return knex.schema.dropTableIfExists("casos").then(() => {
+    return knex.schema.dropTableIfExists("agentes").then(() => {
+      return knex.schema.createTable("agentes", (table) => {
+        table.increments("id").primary();
+        table.string("nome").notNullable();
+        table.date("dataDeIncorporacao").notNullable();
+        table.string("cargo").notNullable();
+      });
+    });
   });
 };
 ```
 
-Esse `down` deveria apenas desfazer a criação da tabela `agentes`. Alterar outra tabela pode gerar inconsistências.
-
-### Sugestão:
-
-- No `down` da migration de `agentes`, apenas faça:
+E no migration de casos:
 
 ```js
-exports.down = function (knex) {
-  return knex.schema.dropTableIfExists("agentes");
+exports.up = function (knex) {
+  return knex.schema.dropTableIfExists("casos").then(() => {
+    return knex.schema.createTable("casos", (table) => {
+      table.increments("id").primary();
+      table.string("titulo").notNullable();
+      table.string("descricao").notNullable();
+      table.enum("status", ["aberto", "solucionado"]).notNullable();
+      table
+        .integer("agente_id")
+        .references("id")
+        .inTable("agentes")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE")
+        .notNullable();
+    });
+  });
 };
 ```
 
-- No `down` da migration de `casos`, faça o mesmo para a tabela `casos`.
+**Porém, percebi que você está fazendo `dropTableIfExists("casos")` dentro da migration de agentes.** Isso pode causar efeitos colaterais inesperados, especialmente se as migrations forem executadas individualmente ou fora de ordem. O ideal é que cada migration cuide apenas da sua própria tabela, para manter o versionamento limpo e previsível.
 
-Assim, o arquivo `solution_migrations.js` controla a ordem correta de aplicação e reversão.
+Sugestão para o migration de agentes:
+
+```js
+exports.up = function (knex) {
+  return knex.schema.dropTableIfExists("agentes").then(() => {
+    return knex.schema.createTable("agentes", (table) => {
+      table.increments("id").primary();
+      table.string("nome").notNullable();
+      table.date("dataDeIncorporacao").notNullable();
+      table.string("cargo").notNullable();
+    });
+  });
+};
+```
+
+E deixar a exclusão da tabela `casos` apenas na migration específica dela.
+
+Além disso, recomendo revisar o uso dos comandos de migração para garantir que todas as migrations foram aplicadas corretamente, usando:  
+```sh
+npx knex migrate:latest
+```
+
+E para popular os dados iniciais, executar as seeds em ordem com:  
+```sh
+npx knex seed:run
+```
+
+Se quiser entender melhor sobre migrations e seeds, confira:  
+- [Documentação oficial do Knex - Migrations](https://knexjs.org/guide/migrations.html)  
+- [Vídeo sobre Seeds com Knex](http://googleusercontent.com/youtube.com/knex-seeds)
 
 ---
 
-## 5. Cuidado com Tipos de Dados e IDs
+### 4. Repositórios e Queries SQL
 
-Nas migrations, você está usando `table.increments("id").primary();` para criar IDs inteiros auto-incrementados.
+Seus repositórios estão muito bem organizados, usando Knex para construir as queries, o que é excelente! A modularização está clara e fácil de entender.
 
-Porém, no seu código, especialmente nos seeds e controllers, você parece trabalhar com IDs do tipo UUID (strings), por exemplo:
+No `agentesRepository.js`, por exemplo, seu método para buscar todos os agentes com filtros e ordenação está assim:
 
 ```js
-{
-  "id": "f5fb2ad5-22a8-4cb4-90f2-8733517a0d46",
-  "titulo": "homicidio",
-  ...
+const findAll = async ({ cargo = null, sort = null }) => {
+  let query = db("agentes");
+
+  if (cargo) {
+    query = query.where("cargo", cargo);
+  }
+
+  if (sort) {
+    if (sort === "dataDeIncorporacao") {
+      query = query.orderBy("dataDeIncorporacao", "asc");
+    } else if (sort === "-dataDeIncorporacao") {
+      query = query.orderBy("dataDeIncorporacao", "desc");
+    }
+  }
+
+  return query;
+};
+```
+
+Essa parte está ótima, mas percebi que você não está usando `await` ao retornar a query. Embora Knex permita isso, para garantir que o resultado seja retornado como array e não como uma query builder, recomendo usar `await` para executar a query:
+
+```js
+return await query;
+```
+
+Isso evita qualquer comportamento inesperado ao consumir os dados no controller.
+
+O mesmo vale para o `casosRepository.js` no método `findAll`:
+
+```js
+const findAll = async ({ agente_id = null, status = null, q = null }) => {
+  const query = db("casos");
+
+  if (agente_id) {
+    query.where("agente_id", agente_id);
+  }
+
+  if (status) {
+    query.where("status", status);
+  }
+
+  if (q) {
+    query.where(function () {
+      this.whereILike("titulo", `%${q}%`).orWhereILike("descricao", `%${q}%`);
+    });
+  }
+
+  return query;
+};
+```
+
+Aqui também sugiro:
+
+```js
+return await query;
+```
+
+Assim, você garante que o resultado da consulta seja o esperado.
+
+---
+
+### 5. Testes Bônus Falhados: Filtros e Mensagens Customizadas
+
+Você entregou filtros básicos de status e agente para casos, o que é ótimo! 🎯 Porém, notei que alguns filtros mais complexos e mensagens customizadas de erro para agentes e casos não estão funcionando perfeitamente.
+
+Por exemplo:
+
+- O endpoint para filtrar agentes por data de incorporação com ordenação crescente e decrescente não está passando.  
+- A busca por casos do agente e filtragem por palavras-chave no título/descrição também falhou.  
+- Mensagens de erro customizadas para parâmetros inválidos (ex: filtro de agente ou status inválidos) não estão totalmente implementadas.
+
+Isso geralmente acontece quando a validação dos parâmetros de query ou o tratamento dos erros não está alinhado com o que o cliente espera.
+
+**Dica:** No seu controller, você já faz algumas validações, mas pode melhorar o feedback para o usuário, incluindo mensagens mais detalhadas e status HTTP coerentes.
+
+Por exemplo, no `casosController.js`:
+
+```js
+if (req.query.status) {
+  if (req.query.status !== "aberto" && req.query.status !== "solucionado") {
+    return next(
+      new ApiError("Parâmetros inválidos", 400, [
+        {
+          status:
+            "O campo 'status' pode ser somente 'aberto' ou 'solucionado' ",
+        },
+      ])
+    );
+  }
 }
 ```
 
-Se você usa IDs inteiros no banco, mas espera UUIDs no código, isso pode gerar falhas na busca, atualização e exclusão.
+Aqui está ótimo, mas certifique-se que o middleware de validação e o schema Zod também estão alinhados com essas regras para evitar inconsistências.
 
-### O que fazer?
-
-- Decida se vai usar IDs inteiros ou UUIDs. Para UUIDs, a migration deve criar a coluna `id` como `uuid` e gerar valores automaticamente, por exemplo:
-
-```js
-table.uuid("id").primary().defaultTo(knex.raw('uuid_generate_v4()'));
-```
-
-- Caso prefira IDs inteiros, ajuste seu código para manipular números, não strings.
-
-Essa discrepância pode ser a raiz de muitos erros de "não encontrado" (404) que você está enfrentando.
+Para aprimorar o entendimento sobre validação e tratamento de erros em APIs, recomendo:  
+- [Validação de Dados e Tratamento de Erros na API (MDN 400 e 404)](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/400)  
+- [Vídeo sobre Validação em APIs Node.js/Express](https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_)
 
 ---
 
-## 6. Validação e Tratamento de Erros
+### 6. Status Codes HTTP e Retorno das Respostas
 
-Você fez um ótimo trabalho implementando validações com Zod e retornando erros customizados com `ApiError`. Isso é um ponto forte no seu projeto! 👍
+Você utilizou corretamente os códigos HTTP 200, 201 e 204 na maioria dos casos, o que é fundamental para uma API REST bem feita. Isso mostra que você entende o protocolo HTTP e como usá-lo.
 
-Só reforço que, para garantir que os erros 404 sejam retornados corretamente, sua lógica deve garantir que o ID usado para buscar no banco exista e esteja no formato esperado (veja o ponto anterior sobre UUID x int).
-
----
-
-# Resumo Rápido para Você Focar 🚦
-
-- [ ] **Confirme a conexão do seu banco PostgreSQL:** `.env`, Docker e porta correta. Rode o container e as migrations antes de testar a API.
-- [ ] **Padronize os nomes do container no Docker e nos scripts NPM** para evitar erros de conexão.
-- [ ] **Ajuste os métodos `remove` nos repositories** para não usar `.returning()` com `.del()`, retornando o registro antes de deletar.
-- [ ] **Reveja os arquivos de migrations**, especialmente os métodos `down`, para evitar alterar tabelas fora de sua responsabilidade.
-- [ ] **Decida entre IDs inteiros ou UUIDs** e ajuste migrations, seeds e código para usar o mesmo tipo de ID.
-- [ ] **Continue usando as validações e tratamento de erros**, pois isso está muito bem implementado!
+Continue atento para, por exemplo, retornar 404 quando o recurso não for encontrado, e 400 para dados inválidos. Seu uso de um middleware de erro personalizado (`ApiError`) é uma ótima prática!
 
 ---
 
-# Últimas palavras de incentivo 🌟
+## Resumo dos Pontos para Focar e Melhorar 🚦
 
-Davi, você está no caminho certo! Seu projeto já tem uma base sólida, com organização, validação e estrutura modular. As falhas que apontamos são comuns e fazem parte do aprendizado. Corrigindo esses pontos, sua API vai funcionar perfeitamente com o banco de dados real, e você terá uma aplicação robusta e escalável.
-
-Continue assim, firme e forte! Cada detalhe que você ajustar vai te levar para um nível mais alto. Se precisar, revisite os recursos que te passei para fortalecer seu conhecimento. Estou aqui para te ajudar nessa jornada! 🚀
-
----
-
-# Recursos recomendados para você:
-
-- [Como configurar PostgreSQL com Docker e Node.js](http://googleusercontent.com/youtube.com/docker-postgresql-node)  
-- [Documentação oficial do Knex.js - Migrations](https://knexjs.org/guide/migrations.html)  
-- [Documentação oficial do Knex.js - Query Builder](https://knexjs.org/guide/query-builder.html)  
-- [Validação e tratamento de erros em APIs Node.js](https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_)  
-- [Arquitetura MVC para Node.js](https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH)  
+- **Separar as migrations para que cada uma cuide apenas da sua tabela**, evitando `dropTableIfExists` de outras tabelas dentro de uma migration. Isso ajuda a manter a integridade e evitar efeitos colaterais.  
+- **Adicionar `await` ao retornar queries no repositório** para garantir que o resultado seja uma lista de registros, não uma query builder.  
+- **Reforçar a validação dos parâmetros de query e melhorar as mensagens de erro customizadas**, alinhando os schemas Zod, middlewares de validação e controllers para uma experiência consistente.  
+- **Garantir que o arquivo `.env` esteja correto e que o banco esteja rodando no Docker** para evitar falhas de conexão que impactam toda a API.  
+- **Revisar e executar as migrations e seeds na ordem correta**, usando os comandos recomendados para garantir que o banco esteja sempre atualizado e populado.  
+- **Continuar mantendo a arquitetura modular e clara**, o que você já fez muito bem!  
 
 ---
 
-Fique à vontade para me chamar quando quiser revisar as correções ou tirar dúvidas. Você tem tudo para mandar muito bem! 💙👨‍💻
+## Para te ajudar a evoluir ainda mais, aqui estão alguns recursos que vão te dar uma mãozinha:
 
-Um abraço do seu Code Buddy! 🤖✨
+- [Knex.js Migrations - Documentação Oficial](https://knexjs.org/guide/migrations.html)  
+- [Knex Query Builder - Guia Completo](https://knexjs.org/guide/query-builder.html)  
+- [Configuração de Banco de Dados com Docker e Node.js](http://googleusercontent.com/youtube.com/docker-postgresql-node)  
+- [Validação e Tratamento de Erros em APIs Node.js](https://youtu.be/yNDCRAz7CM8?si=Lh5u3j27j_a4w3A_)  
+- [Arquitetura MVC em Node.js](https://youtu.be/bGN_xNc4A1k?si=Nj38J_8RpgsdQ-QH)  
+
+---
+
+# Parabéns pelo seu progresso, Davi! 🎉
+
+Você está no caminho certo, com uma base sólida e boas práticas de código. Com pequenos ajustes na organização das migrations, tratamento das queries e validação, sua API ficará ainda mais robusta e alinhada com os padrões do mercado.
+
+Continue praticando, testando e explorando os conceitos! Estou aqui torcendo pelo seu sucesso! 🚀💪
+
+Se precisar, é só chamar! 😉
+
+Abraços,  
+Seu Code Buddy 👨‍💻❤️
 
 > Caso queira tirar uma dúvida específica, entre em contato com o Chapter no nosso [discord](https://discord.gg/DryuHVnz).
 
