@@ -62,8 +62,8 @@ const remove = async (id) => {
   if (!agenteDB) {
     return null;
   }
-  const removedAgente = await db("agentes").where({ id }).del().returning("*");
-  return removedAgente[0];
+  await db("agentes").where({ id }).del()
+  return agenteDB;
 };
 
 module.exports = {

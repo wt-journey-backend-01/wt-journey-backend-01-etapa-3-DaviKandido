@@ -55,7 +55,7 @@ Este projeto possui um arquivo `docker-compose.yml` na raiz. Seu conteúdo é:
 
 ```yaml
 services:
-    postgres-db:
+    postgres-database:
         container_name: postgres-database
         image: postgres:17
         restart: unless-stopped
@@ -64,7 +64,7 @@ services:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
         ports:
-            - "2:5432" # Porta externa alterada para evitar conflito, utiliza-se a 5433:5432
+            - "5432:5432"
         volumes:
             - postgres-data:/var/lib/postgresql/data
 

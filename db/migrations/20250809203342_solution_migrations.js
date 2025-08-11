@@ -14,8 +14,7 @@ exports.up = async function (knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function (knex) {
-  return knex.schema
-    .dropTableIfExists("casos")
-    .then(() => knex.schema.dropTableIfExists("agentes"));
+exports.down = async function (knex) {
+  await migrationsCasos.down(knex);
+  await migrationsAgentes.down(knex); 
 };
